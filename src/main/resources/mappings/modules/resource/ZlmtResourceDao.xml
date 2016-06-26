@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resource.dao.ZlmtResourceDao">
+    
+	<sql id="zlmtResourceColumns">
+		a.id AS "id",
+		a.resource_code AS "resourceCode",
+		a.resource_name AS "resourceName",
+		a.loc_idc AS "locIdc",
+		a.loc_cabinet AS "locCabinet",
+		a.loc_cabinet_place AS "locCabinetPlace",
+		a.resource_sn AS "resourceSn",
+		a.manufacturer AS "manufacturer",
+		a.manufacturer_linkman AS "manufacturerLinkman",
+		a.manufacturer_tel AS "manufacturerTel",
+		a.resource_type AS "resourceType",
+		a.resource_model AS "resourceModel",
+		a.resource_level AS "resourceLevel",
+		a.owner_service AS "ownerService",
+		a.purchase_date AS "purchaseDate",
+		a.maint_date AS "maintDate",
+		a.config_desc AS "configDesc",
+		a.resource_status AS "resourceStatus",
+		a.owner_office_id  AS "office.id",
+		o.name AS "office.name",
+		a.ex_attribute_dict_type AS "exAttributeDictType",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="zlmtResourceJoins">
+		LEFT JOIN sys_office o ON o.id = a.owner_office_id
+	</sql>
+    
+	<select id="get" resultType="ZlmtResource">
+		SELECT 
+			<include refid="zlmtResourceColumns"/>
+		FROM zlmt_resource a
+		<include refid="zlmtResourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZlmtResource">
+		SELECT 
+			<include refid="zlmtResourceColumns"/>
+		FROM zlmt_resource a
+		<include refid="zlmtResourceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resourceCode != null and resourceCode != ''">
+				AND a.resource_code = #{resourceCode}
+			</if>
+			<if test="resourceName != null and resourceName != ''">
+				AND a.resource_name like '%'||#{resourceName}||'%'
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND (o.id = #{office.id} OR o.parent_ids LIKE '%,'||#{office.id}||',%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ZlmtResource">
+		SELECT 
+			<include refid="zlmtResourceColumns"/>
+		FROM zlmt_resource a
+		<include refid="zlmtResourceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zlmt_resource(
+			id,
+			resource_code,
+			resource_name,
+			loc_idc,
+			loc_cabinet,
+			loc_cabinet_place,
+			resource_sn,
+			manufacturer,
+			manufacturer_linkman,
+			manufacturer_tel,
+			resource_type,
+			resource_model,
+			resource_level,
+			owner_service,
+			purchase_date,
+			maint_date,
+			config_desc,
+			resource_status,
+			owner_office_id,
+			owner_office,
+			ex_attribute_dict_type,
+			remark,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resourceCode},
+			#{resourceName},
+			#{locIdc},
+			#{locCabinet},
+			#{locCabinetPlace},
+			#{resourceSn},
+			#{manufacturer},
+			#{manufacturerLinkman},
+			#{manufacturerTel},
+			#{resourceType},
+			#{resourceModel},
+			#{resourceLevel},
+			#{ownerService},
+			#{purchaseDate},
+			#{maintDate},
+			#{configDesc},
+			#{resourceStatus},
+			#{office.id},
+			#{ownerOffice},
+			#{exAttributeDictType},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zlmt_resource SET 	
+			resource_code = #{resourceCode},
+			resource_name = #{resourceName},
+			loc_idc = #{locIdc},
+			loc_cabinet = #{locCabinet},
+			loc_cabinet_place = #{locCabinetPlace},
+			resource_sn = #{resourceSn},
+			manufacturer = #{manufacturer},
+			manufacturer_linkman = #{manufacturerLinkman},
+			manufacturer_tel = #{manufacturerTel},
+			resource_type = #{resourceType},
+			resource_model = #{resourceModel},
+			resource_level = #{resourceLevel},
+			owner_service = #{ownerService},
+			purchase_date = #{purchaseDate},
+			maint_date = #{maintDate},
+			config_desc = #{configDesc},
+			resource_status = #{resourceStatus},
+			owner_office_id = #{office.id},
+			owner_office = #{ownerOffice},
+			ex_attribute_dict_type = #{exAttributeDictType},
+			remark = #{remark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zlmt_resource SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resource.dao.ZlmtMaintenanceRecordDao">
+    
+	<sql id="zlmtMaintenanceRecordColumns">
+		a.id AS "id",
+		a.resource_id AS "resource.id",
+		r.resource_name AS "resource.resourceName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.user_tel AS "userTel",
+		a.maintenance_reason AS "maintenanceReason",
+		a.maintenance_operation AS "maintenanceOperation",
+		a.maintenance_result AS "maintenanceResult",
+		a.from_time AS "fromTime",
+		a.thru_time AS "thruTime",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="zlmtMaintenanceRecordJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+		LEFT JOIN zlmt_resource r ON r.id = a.resource_id
+	</sql>
+    
+	<select id="get" resultType="ZlmtMaintenanceRecord">
+		SELECT 
+			<include refid="zlmtMaintenanceRecordColumns"/>
+		FROM zlmt_maintenance_record a
+		<include refid="zlmtMaintenanceRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZlmtMaintenanceRecord">
+		SELECT 
+			<include refid="zlmtMaintenanceRecordColumns"/>
+		FROM zlmt_maintenance_record a
+		<include refid="zlmtMaintenanceRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resourceName != null and resourceName != ''">
+				AND a.resource_name like '%'||#{resourceName}||'%'
+			</if>
+			<if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+				AND a.create_date BETWEEN #{beginDate} AND #{endDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ZlmtMaintenanceRecord">
+		SELECT 
+			<include refid="zlmtMaintenanceRecordColumns"/>
+		FROM zlmt_maintenance_record a
+		<include refid="zlmtMaintenanceRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zlmt_maintenance_record(
+			id,
+			resource_id,
+			resource_name,
+			user_id,
+			user_name,
+			user_tel,
+			maintenance_reason,
+			maintenance_operation,
+			maintenance_result,
+			from_time,
+			thru_time,
+			remark,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resource.id},
+			#{resource.resourceName},
+			#{user.id},
+			#{userName},
+			#{userTel},
+			#{maintenanceReason},
+			#{maintenanceOperation},
+			#{maintenanceResult},
+			#{fromTime},
+			#{thruTime},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zlmt_maintenance_record SET 	
+			resource_id = #{resource.id},
+			resource_name = #{resource.resourceName},
+			user_id = #{user.id},
+			user_name = #{userName},
+			user_tel = #{userTel},
+			maintenance_reason = #{maintenanceReason},
+			maintenance_operation = #{maintenanceOperation},
+			maintenance_result = #{maintenanceResult},
+			from_time = #{fromTime},
+			thru_time = #{thruTime},
+			remark = #{remark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zlmt_maintenance_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

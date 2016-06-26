@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.worksheet.dao.ZlmtWorksheetDao">
+    
+	<sql id="zlmtWorksheetColumns">
+		a.id AS "id",
+		a.worksheet_code AS "worksheetCode",
+		a.worksheet_title AS "worksheetTitle",
+		a.worksheet_reason AS "worksheetReason",
+		a.worksheet_req AS "worksheetReq",
+		a.req_begin_time AS "reqBeginTime",
+		a.req_thru_time AS "reqThruTime",
+		a.real_begin_time AS "realBeginTime",
+		a.real_thru_time AS "realThruTime",
+		a.worksheet_status AS "worksheetStatus",
+		a.ex_attribute_dict_type AS "exAttributeDictType",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="zlmtWorksheetJoins">
+	</sql>
+    
+	<select id="get" resultType="ZlmtWorksheet">
+		SELECT 
+			<include refid="zlmtWorksheetColumns"/>
+		FROM zlmt_worksheet a
+		<include refid="zlmtWorksheetJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZlmtWorksheet">
+		SELECT 
+			<include refid="zlmtWorksheetColumns"/>
+		FROM zlmt_worksheet a
+		<include refid="zlmtWorksheetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ZlmtWorksheet">
+		SELECT 
+			<include refid="zlmtWorksheetColumns"/>
+		FROM zlmt_worksheet a
+		<include refid="zlmtWorksheetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zlmt_worksheet(
+			id,
+			worksheet_code,
+			worksheet_title,
+			worksheet_reason,
+			worksheet_req,
+			req_begin_time,
+			req_thru_time,
+			real_begin_time,
+			real_thru_time,
+			worksheet_status,
+			ex_attribute_dict_type,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{worksheetCode},
+			#{worksheetTitle},
+			#{worksheetReason},
+			#{worksheetReq},
+			#{reqBeginTime},
+			#{reqThruTime},
+			#{realBeginTime},
+			#{realThruTime},
+			#{worksheetStatus},
+			#{exAttributeDictType},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zlmt_worksheet SET 	
+			worksheet_code = #{worksheetCode},
+			worksheet_title = #{worksheetTitle},
+			worksheet_reason = #{worksheetReason},
+			worksheet_req = #{worksheetReq},
+			req_begin_time = #{reqBeginTime},
+			req_thru_time = #{reqThruTime},
+			real_begin_time = #{realBeginTime},
+			real_thru_time = #{realThruTime},
+			worksheet_status = #{worksheetStatus},
+			ex_attribute_dict_type = #{exAttributeDictType},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zlmt_worksheet SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resource.dao.ZlmtResourceUserDao">
+    
+	<sql id="zlmtResourceUserColumns">
+		a.id AS "id",
+		a.resource_id AS "resourceId",
+		a.user_id AS "user.id",
+		a.relation_type AS "relationType",
+		a.from_time AS "fromTime",
+		a.thru_time AS "thruTime",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="zlmtResourceUserJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ZlmtResourceUser">
+		SELECT 
+			<include refid="zlmtResourceUserColumns"/>
+		FROM zlmt_resource_user a
+		<include refid="zlmtResourceUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZlmtResourceUser">
+		SELECT 
+			<include refid="zlmtResourceUserColumns"/>
+		FROM zlmt_resource_user a
+		<include refid="zlmtResourceUserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ZlmtResourceUser">
+		SELECT 
+			<include refid="zlmtResourceUserColumns"/>
+		FROM zlmt_resource_user a
+		<include refid="zlmtResourceUserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zlmt_resource_user(
+			id,
+			resource_id,
+			user_id,
+			relation_type,
+			from_time,
+			thru_time,
+			remark,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{resourceId},
+			#{user.id},
+			#{relationType},
+			#{fromTime},
+			#{thruTime},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zlmt_resource_user SET 	
+			resource_id = #{resourceId},
+			user_id = #{user.id},
+			relation_type = #{relationType},
+			from_time = #{fromTime},
+			thru_time = #{thruTime},
+			remark = #{remark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zlmt_resource_user SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
