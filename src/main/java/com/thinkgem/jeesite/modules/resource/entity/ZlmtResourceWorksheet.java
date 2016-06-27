@@ -16,7 +16,9 @@ public class ZlmtResourceWorksheet extends DataEntity<ZlmtResourceWorksheet> {
 	
 	private static final long serialVersionUID = 1L;
 	private String resourceId;		// 资源id
+	private String resourceName;
 	private String worksheetId;		// 工单id
+	private String worksheetTitle;
 	
 	public ZlmtResourceWorksheet() {
 		super();
@@ -43,5 +45,20 @@ public class ZlmtResourceWorksheet extends DataEntity<ZlmtResourceWorksheet> {
 	public void setWorksheetId(String worksheetId) {
 		this.worksheetId = worksheetId;
 	}
-	
+
+	public String getResourceName() {
+		return resourceName;
+	}
+
+	public void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
+	}
+
+	public String getWorksheetTitle() {
+		return worksheetTitle;
+	}
+
+	public void setWorksheetTitle(String worksheetTitle) {
+		this.worksheetTitle = worksheetTitle;
+	}
 }

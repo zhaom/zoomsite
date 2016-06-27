@@ -5,8 +5,12 @@ package com.thinkgem.jeesite.modules.worksheet.web;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.resource.entity.ZlmtResourceWorksheet;
+import com.thinkgem.jeesite.modules.resource.service.ZlmtResourceService;
+import com.thinkgem.jeesite.modules.resource.service.ZlmtResourceWorksheetService;
 import com.thinkgem.jeesite.modules.worksheet.entity.ZlmtWorksheet;
 import com.thinkgem.jeesite.modules.worksheet.service.ZlmtWorksheetService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 工单管理Controller
@@ -32,6 +37,12 @@ public class ZlmtWorksheetController extends BaseController {
 
 	@Autowired
 	private ZlmtWorksheetService zlmtWorksheetService;
+
+	@Autowired
+	private ZlmtResourceWorksheetService zlmtResourceWorksheetService;
+
+	@Autowired
+	private ZlmtResourceService zlmtResourceService;
 	
 	@ModelAttribute
 	public ZlmtWorksheet get(@RequestParam(required=false) String id) {
@@ -65,20 +76,33 @@ public class ZlmtWorksheetController extends BaseController {
 			// 审批环节
 			else if (taskDefKey.contains("audit") || taskDefKey.contains("Audit")){
 				view = "zlmtWorksheetAuditForm";
-			}else{    //处理或者修改等环节
-				view = "zlmtWorksheetAuditForm";
+			}else if(taskDefKey.contains("do") || taskDefKey.contains("Do")){    //处理或者修改等环节
+				view = "zlmtWorksheetDoForm";
 			}
+			ZlmtResourceWorksheet resourceWorksheet = new ZlmtResourceWorksheet();
+			resourceWorksheet.setWorksheetId(zlmtWorksheet.getId());
+			List<ZlmtResourceWorksheet> resourceWorksheetList = zlmtResourceWorksheetService.findList(resourceWorksheet);
+			if(resourceWorksheetList != null && resourceWorksheetList.size()>0){
+				model.addAttribute("resourceSheetList", resourceWorksheetList);
+			}
+		}else{
+			String worksheetCode = "WS"+ DateUtils.getYear()+DateUtils.getMonth()+DateUtils.getDay()+"01";
+			zlmtWorksheet.setWorksheetCode(worksheetCode);
 		}
 		model.addAttribute("zlmtWorksheet", zlmtWorksheet);
 		return "modules/worksheet/"+view;
 	}
 
 	@RequestMapping(value = "save")
-	public String save(ZlmtWorksheet zlmtWorksheet, Model model, RedirectAttributes redirectAttributes) {
+	public String save(ZlmtWorksheet zlmtWorksheet, Model model, HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, zlmtWorksheet)){
 			return form(zlmtWorksheet, model);
 		}
 		zlmtWorksheetService.save(zlmtWorksheet);
+		String resourceCodes = httpServletRequest.getParameter("resources");
+		if(StringUtils.isNotBlank(resourceCodes)){
+			zlmtResourceWorksheetService.batchSave(zlmtWorksheet.getId(), resourceCodes);
+		}
 		addMessage(redirectAttributes, "提交审批成功");
 		return "redirect:" + adminPath + "/act/task/todo/";
 	}

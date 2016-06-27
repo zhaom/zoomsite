@@ -17,10 +17,6 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/worksheet/zlmtWorksheet/">工单基本信息列表</a></li>
-		<shiro:hasPermission name="worksheet:zlmtWorksheet:edit"><li><a href="${ctx}/worksheet/zlmtWorksheet/form">工单基本信息添加</a></li></shiro:hasPermission>
-	</ul>
 	<form:form id="searchForm" modelAttribute="zlmtWorksheet" action="${ctx}/worksheet/zlmtWorksheet/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>

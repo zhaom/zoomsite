@@ -57,15 +57,21 @@
 
         </tr>
             <tr>
-                <td class="tit">发起申请原因：</td>
+                <td class="tit">故障现象：</td>
                 <td colspan="3">
-                    <form:textarea path="worksheetReason" class="required" rows="5" maxlength="200" cssStyle="width:500px" disabled="true"/>
+                    ${zlmtWorksheet.worksheetReason}
                 </td>
             </tr>
             <tr>
-                <td class="tit">要求处理结果：</td>
+                <td class="tit">处理要求：</td>
                 <td colspan="3">
-                    <form:textarea path="worksheetReq" class="required" rows="5" maxlength="200" cssStyle="width:500px" disabled="true"/>
+                        ${zlmtWorksheet.worksheetReq}
+                </td>
+            </tr>
+            <tr>
+                <td class="tit">涉及资源：</td>
+                <td colspan="3">
+                    ${}
                 </td>
             </tr>
             <tr>

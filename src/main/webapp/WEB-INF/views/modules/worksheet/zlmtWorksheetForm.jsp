@@ -26,10 +26,6 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/worksheet/zlmtWorksheet/">工单基本信息列表</a></li>
-		<li class="active"><a href="${ctx}/worksheet/zlmtWorksheet/form?id=${zlmtWorksheet.id}">一般故障处理申请单</a></li>
-	</ul><br/>
 	<form:form id="inputForm" modelAttribute="zlmtWorksheet" action="${ctx}/worksheet/zlmtWorksheet/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="act.taskId"/>
@@ -40,7 +36,7 @@
 		<form:hidden id="flag" path="act.flag"/>
 		<sys:message content="${message}"/>
 	<fieldset>
-		<legend>审批申请</legend>
+		<legend>一般故障处理单</legend>
 		<table class="table-form">
 			<tr>
 				<td class="tit">工单编码：</td><td>
@@ -61,15 +57,21 @@
 
 			</tr>
 			<tr>
-				<td class="tit">发起申请原因：</td>
+				<td class="tit">故障现象：</td>
 				<td colspan="3">
-					<form:textarea path="worksheetReason" class="required" rows="5" maxlength="200" cssStyle="width:500px"/>
+					<form:input path="worksheetReason" htmlEscape="false" maxlength="256" class="input-xlarge" style="width:720px;"/>
 				</td>
 			</tr>
 			<tr>
-				<td class="tit">要求处理结果：</td>
+				<td class="tit">处理要求：</td>
 				<td colspan="3">
-					<form:textarea path="worksheetReq" class="required" rows="5" maxlength="200" cssStyle="width:500px"/>
+					<form:input path="worksheetReq" htmlEscape="false" maxlength="256" class="input-xlarge " style="width:720px;"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="tit">涉及资源：</td>
+				<td colspan="3">
+					<input type="input" name="resources" id="resources">逗号分隔添加多个资源的编码
 				</td>
 			</tr>
 			<tr>
@@ -90,6 +92,7 @@
 			</tr>
 			</table>
 		</fieldset>
+
 		<div class="form-actions">
 				<input id="btnSubmit" class="btn btn-primary" type="submit" value="提交申请" onclick="$('#flag').val('yes')"/>&nbsp;
 				<c:if test="${not empty zlmtWorksheet.id}">

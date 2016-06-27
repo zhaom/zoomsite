@@ -5,7 +5,9 @@
 	<sql id="zlmtResourceWorksheetColumns">
 		a.id AS "id",
 		a.resource_id AS "resourceId",
+		r.resource_name AS "resourceName",
 		a.worksheet_id AS "worksheetId",
+		w.worksheet_title AS "worksheetTitle",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -15,6 +17,8 @@
 	</sql>
 	
 	<sql id="zlmtResourceWorksheetJoins">
+		LEFT JOIN zlmt_resource r ON r.id = a.resource_id
+		LEFT JOIN zlmt_worksheet w ON w.id = a.worksheet_id
 	</sql>
     
 	<select id="get" resultType="ZlmtResourceWorksheet">
@@ -32,6 +36,12 @@
 		<include refid="zlmtResourceWorksheetJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="resourceId != null and resourceId != ''">
+				AND a.resource_id = #{resourceId}
+			</if>
+			<if test="worksheetId != null and worksheetId != ''">
+				AND a.worksheet_id = #{worksheetId}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
