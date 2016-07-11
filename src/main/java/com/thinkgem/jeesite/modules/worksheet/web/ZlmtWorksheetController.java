@@ -74,10 +74,13 @@ public class ZlmtWorksheetController extends BaseController {
 				view = "zlmtWorksheetView";
 			}
 			// 审批环节
-			else if (taskDefKey.contains("audit") || taskDefKey.contains("Audit")){
+			/*else if (taskDefKey.contains("audit") || taskDefKey.contains("Audit")){
 				view = "zlmtWorksheetAuditForm";
-			}else if(taskDefKey.contains("do") || taskDefKey.contains("Do")){    //处理或者修改等环节
+			}else if(taskDefKey.contains("do") || taskDefKey.contains("Do")){
 				view = "zlmtWorksheetDoForm";
+			}*/
+			else {
+				view = "zlmtWorksheetAuditForm";
 			}
 			ZlmtResourceWorksheet resourceWorksheet = new ZlmtResourceWorksheet();
 			resourceWorksheet.setWorksheetId(zlmtWorksheet.getId());

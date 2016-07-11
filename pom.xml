@@ -573,7 +573,13 @@
 			<scope>system</scope>
 			<systemPath>D:/eclipseWork/zoomsite-master/lib/UserAgentUtils-1.13.jar</systemPath>
 		</dependency>
-		
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
+			<version>3.7.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- 自定义jar依赖包
 		<dependency>
 			<groupId>com.thinkgem.jeesite</groupId>

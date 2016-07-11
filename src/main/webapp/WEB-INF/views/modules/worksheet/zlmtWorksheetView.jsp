@@ -36,19 +36,20 @@
             <tr>
                 <td class="tit">发起申请原因：</td>
                 <td colspan="3">
-                    <form:textarea path="worksheetReason" class="required" rows="5" maxlength="200" cssStyle="width:500px" disabled="true"/>
+                    ${zlmtWorksheet.worksheetReason}
                 </td>
             </tr>
             <tr>
                 <td class="tit">要求处理结果：</td>
                 <td colspan="3">
-                    <form:textarea path="worksheetReq" class="required" rows="5" maxlength="200" cssStyle="width:500px" disabled="true"/>
+                    ${zlmtWorksheet.worksheetReq}
                 </td>
             </tr>
             <tr>
                 <td class="tit">实际处理开始时间：</td>
                 <td>
                     <fmt:formatDate value="${zlmtWorksheet.realBeginTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+
                 </td>
                 <td class="tit">实际处理结束时间：</td>
                 <td>
@@ -58,7 +59,7 @@
             <tr>
                 <td class="tit">备注信息：</td>
                 <td colspan="3">
-                    <form:textarea path="remarks" class="required" rows="5" maxlength="200" cssStyle="width:500px" disabled="true"/>
+                    ${zlmtWorksheet.remarks}
                 </td>
             </tr>
         </table>

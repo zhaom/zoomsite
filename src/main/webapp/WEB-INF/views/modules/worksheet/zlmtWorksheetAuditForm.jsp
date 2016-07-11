@@ -68,12 +68,13 @@
                         ${zlmtWorksheet.worksheetReq}
                 </td>
             </tr>
-            <tr>
+
+<%--            <tr>
                 <td class="tit">涉及资源：</td>
                 <td colspan="3">
                     ${}
                 </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td class="tit">实际处理开始时间：</td>
                 <td>
